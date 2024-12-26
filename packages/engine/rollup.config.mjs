@@ -13,6 +13,27 @@ const builderECS = (format, filename) => ({
     sourcemap: true,
 });
 
+const workerConfig = (worker) => ({
+    input: `src/worker/${worker}.ts`,
+    output: [
+        builderECS("umd", `${worker}.js`),
+        builderECS("esm", `${worker}.esm.js`),
+        builderECS("cjs", `${worker}.cjs.js`),
+    ],
+    plugins: [
+        nodeResolve(),
+        typescript({
+            compilerOptions: {
+                declaration: false,
+                emitDeclarationOnly: false,
+                declarationDir: undefined,
+            },
+        }),
+        commonjs({ extensions: [".ts", ".js"] }),
+        terser(),
+    ],
+});
+
 const main = () => {
     return [
         // this generates one file containing all the type declarations
@@ -47,6 +68,8 @@ const main = () => {
                 terser(),
             ],
         },
+        // this builds the workers
+        workerConfig("broadPhaseWorker"),
     ];
 };
 

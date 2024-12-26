@@ -30,7 +30,7 @@ import { UpdateBoxColliderShapeSystem } from "@system/physics2d/collider/UpdateB
 import { UpdateEdgeColliderShapeSystem } from "@system/physics2d/collider/UpdateEdgeColliderShapeSystem";
 import { UpdatePolygonColliderShapeSystem } from "@system/physics2d/collider/UpdatePolygonColliderShapeSystem";
 import { UpdateTilemapColliderShapeSystem } from "@system/physics2d/collider/UpdateTilemapColliderShapeSystem";
-import { ResolveCollisionSystem } from "@system/physics2d/ResolveCollisionSystem";
+import { ResolveCollisionSystem } from "@system/physics2d/ResolveCollisionSystemNew";
 import { ApplyRepositionSystem } from "@system/physics2d/ApplyRepositionSystem";
 import { UpdateCollidersAfterRepositionSystem } from "@system/physics2d/collider/UpdateCollidersAfterRepositionSystem";
 

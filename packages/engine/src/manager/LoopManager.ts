@@ -88,20 +88,20 @@ export class LoopManager {
     }
 
     private asyncPhysicsLoop(): void {
-        this.physicsIntervalId = window.setInterval(() => {
+        this.physicsIntervalId = window.setInterval(async () => {
             if (!this.running) return window.clearInterval(this.physicsIntervalId);
             this.timeManager.updateForPhysics(nowInSeconds());
-            if (!document.hidden) this.physicsIteration();
+            if (!document.hidden) await this.physicsIteration();
         }, 1000 / this.timeManager.fixedPhysicsFramerate);
     }
 
-    private physicsIteration(): void {
+    private async physicsIteration(): Promise<void> {
         if (this.timeManager.timeScale <= 0) return;
 
         if (this.systemManager.groupHasSystems(SystemGroup.GamePhysics)) {
             this.systemManager.update(SystemGroup.GamePhysics);
             this.systemManager.update(SystemGroup.Transform);
         }
-        this.systemManager.update(SystemGroup.Physics);
+        await this.systemManager.updateAsync(SystemGroup.Physics);
     }
 }

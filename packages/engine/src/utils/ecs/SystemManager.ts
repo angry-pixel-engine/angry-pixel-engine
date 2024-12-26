@@ -46,6 +46,10 @@ export interface System {
     onUpdate(): void;
 }
 
+export interface AsyncSystem extends System {
+    onUpdate(): Promise<void>;
+}
+
 /**
  * This type represents a system class
  * @public
@@ -63,7 +67,7 @@ export type SystemGroup = string | number | symbol;
  */
 @injectable(TYPES.SystemManager)
 export class SystemManager {
-    private systems: [System, SystemGroup, boolean, boolean][] = []; // [system, group, enabled, created]
+    private systems: [System | AsyncSystem, SystemGroup, boolean, boolean][] = []; // [system, group, enabled, created]
 
     /**
      * @param systemType The system class
@@ -211,5 +215,18 @@ export class SystemManager {
         this.systems
             .filter((system) => system[1] === group && system[2] === true)
             .forEach((system) => system[0].onUpdate());
+    }
+
+    /**
+     *  Call the method onUpdate for asyncronous systems belonging to the given group
+     * @param group The system group
+     * @internal
+     */
+    public async updateAsync(group: SystemGroup): Promise<void> {
+        const systems = this.systems.filter((system) => system[1] === group && system[2] === true);
+
+        for (const system of systems) {
+            await (system[0] as AsyncSystem).onUpdate();
+        }
     }
 }
